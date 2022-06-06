@@ -10,13 +10,16 @@ CONFIG += c++11
 
 SOURCES += \
     src/main.cpp \
-    src/ui/mainwindow/mainwindow.cpp
+    src/ui/mainwindow/mainwindow.cpp \
+    src/ui/securities_management/securitiesmanagementdialog.cpp
 
 HEADERS += \
-    src/ui/mainwindow/mainwindow.h
+    src/ui/mainwindow/mainwindow.h \
+    src/ui/securities_management/securitiesmanagementdialog.h
 
 FORMS += \
-    src/ui/mainwindow/mainwindow.ui
+    src/ui/mainwindow/mainwindow.ui \
+    src/ui/securities_management/securitiesmanagementdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

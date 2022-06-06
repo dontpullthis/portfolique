@@ -13,3 +13,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+
+void MainWindow::on_action_Management_triggered()
+{
+    securitiesManagementDialog.show();
+}
+
