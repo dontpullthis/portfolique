@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 
+#include "src/project/project.h"
 #include "src/ui/securities_management/securitiesmanagementdialog.h"
 
 QT_BEGIN_NAMESPACE
@@ -21,8 +22,11 @@ private slots:
     void on_action_Management_triggered();
 
 private:
+    Project project;
+
     Ui::MainWindow *ui;
 
     SecuritiesManagementDialog securitiesManagementDialog;
+
 };
 #endif // MAINWINDOW_H

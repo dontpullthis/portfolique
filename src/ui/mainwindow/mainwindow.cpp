@@ -3,7 +3,11 @@
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
+    , project()
     , ui(new Ui::MainWindow)
+    , securitiesManagementDialog(&this->project.rootSecurityCategory, nullptr)
+
+
 {
     ui->setupUi(this);
 }
