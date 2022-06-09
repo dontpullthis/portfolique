@@ -5,6 +5,7 @@
 #include <QTreeWidget>
 
 #include "src/project/securities/category.h"
+#include "src/project/securities/security.h"
 #include "securitytreewidgetitem.h"
 
 namespace Ui {
@@ -25,6 +26,8 @@ private slots:
     void on_btnRemoveItem_clicked();
 
     void on_btnAddCategory_clicked();
+
+    void on_btnAddSecurity_clicked();
 
 private:
     Ui::SecuritiesManagementDialog *ui;

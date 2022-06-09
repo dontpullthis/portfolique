@@ -27,10 +27,17 @@ SecurityTreeWidgetItem* SecuritiesManagementDialog::buildSecurityTreeWidget(QTre
 
 void SecuritiesManagementDialog::on_treeWidget_currentItemChanged(QTreeWidgetItem *current)
 {
-    bool isEnabled = current != nullptr;
-    this->ui->btnAddCategory->setEnabled(isEnabled);
-    this->ui->btnAddSecurity->setEnabled(isEnabled);
-    this->ui->btnRemoveItem->setEnabled(isEnabled & (current != allSecuritiesItem) & !current->childCount());
+    SecurityTreeWidgetItem* currentItem = (SecurityTreeWidgetItem*)current;
+    bool isCategorySelected = currentItem && currentItem->model->isCategory();
+    bool isSecuritySelected = currentItem && !currentItem->model->isCategory();
+    this->ui->btnAddCategory->setEnabled(isCategorySelected);
+    this->ui->btnAddSecurity->setEnabled(isCategorySelected);
+    this->ui->btnRemoveItem->setEnabled((current != nullptr) && (current != allSecuritiesItem) && !current->childCount());
+
+    this->ui->editName->setEnabled(currentItem);
+    this->ui->editName->setText(currentItem ? currentItem->model->name : "");
+    this->ui->editCode->setEnabled(isSecuritySelected);
+    this->ui->editDecimalNumbers->setEnabled(isSecuritySelected);
 }
 
 
@@ -53,9 +60,22 @@ void SecuritiesManagementDialog::on_btnAddCategory_clicked()
     Category *newCategory = new Category(QString("(New category)"), currentCategory);
 
     SecurityTreeWidgetItem* newItem = new SecurityTreeWidgetItem(current, newCategory);
+    this->ui->treeWidget->setCurrentItem(newItem);
+}
+
+
+void SecuritiesManagementDialog::on_btnAddSecurity_clicked()
+{
+    SecurityTreeWidgetItem* current = (SecurityTreeWidgetItem*)this->ui->treeWidget->currentItem();
+    if (!(current && current->model->isCategory()))
+        return;
+
+    Category *currentCategory = (Category*)current->model;
+    Security *newSecurity = new Security(QString("(New security)"), currentCategory);
+
+    SecurityTreeWidgetItem* newItem = new SecurityTreeWidgetItem(current, newSecurity);
     newItem->setFlags(newItem->flags() | Qt::ItemIsEditable);
     this->ui->treeWidget->setCurrentItem(newItem);
     this->ui->treeWidget->editItem(newItem);
-
 }
 

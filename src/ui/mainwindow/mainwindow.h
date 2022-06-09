@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QFileDialog>
 
 #include "src/project/project.h"
 #include "src/ui/securities_management/securitiesmanagementdialog.h"
@@ -21,12 +22,12 @@ public:
 private slots:
     void on_action_Management_triggered();
 
+    void on_action_Save_triggered();
+
 private:
     Project project;
 
     Ui::MainWindow *ui;
-
-    SecuritiesManagementDialog securitiesManagementDialog;
 
 };
 #endif // MAINWINDOW_H
