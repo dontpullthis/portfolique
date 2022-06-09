@@ -29,6 +29,9 @@ private slots:
 
     void on_btnAddSecurity_clicked();
 
+    void on_btnResetItem_clicked();
+    void on_btnSaveItem_clicked();
+
 private:
     Ui::SecuritiesManagementDialog *ui;
 
@@ -37,6 +40,7 @@ private:
     Category *rootSecurityCategory;
 
     SecurityTreeWidgetItem* buildSecurityTreeWidget(QTreeWidget *parent, AbstractItem *item = nullptr);
+    void setFormProperties();
 };
 
 #endif // SECURITIESMANAGEMENTDIALOG_H

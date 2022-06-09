@@ -35,9 +35,10 @@ void SecuritiesManagementDialog::on_treeWidget_currentItemChanged(QTreeWidgetIte
     this->ui->btnRemoveItem->setEnabled((current != nullptr) && (current != allSecuritiesItem) && !current->childCount());
 
     this->ui->editName->setEnabled(currentItem);
-    this->ui->editName->setText(currentItem ? currentItem->model->name : "");
     this->ui->editCode->setEnabled(isSecuritySelected);
     this->ui->editDecimalNumbers->setEnabled(isSecuritySelected);
+
+    this->setFormProperties();
 }
 
 
@@ -77,5 +78,34 @@ void SecuritiesManagementDialog::on_btnAddSecurity_clicked()
     newItem->setFlags(newItem->flags() | Qt::ItemIsEditable);
     this->ui->treeWidget->setCurrentItem(newItem);
     this->ui->treeWidget->editItem(newItem);
+}
+
+
+void SecuritiesManagementDialog::on_btnResetItem_clicked()
+{
+    this->setFormProperties();
+}
+
+
+void SecuritiesManagementDialog::setFormProperties()
+{
+    QTreeWidgetItem* current = this->ui->treeWidget->currentItem();
+    SecurityTreeWidgetItem* currentItem = (SecurityTreeWidgetItem*)current;
+
+    if (!currentItem) return;
+
+    this->ui->editName->setText(currentItem ? currentItem->model->name : "");
+}
+
+void SecuritiesManagementDialog::on_btnSaveItem_clicked()
+{
+    QTreeWidgetItem* current = this->ui->treeWidget->currentItem();
+    SecurityTreeWidgetItem* currentItem = (SecurityTreeWidgetItem*)current;
+
+    if (!currentItem) return;
+
+    AbstractItem *model = currentItem->model;
+    model->name = this->ui->editName->text();
+    currentItem->setData(0, 0, model->name);
 }
 
