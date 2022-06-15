@@ -23,10 +23,16 @@ void MainWindow::on_action_Management_triggered()
     dialog->show();
 }
 
-
 void MainWindow::on_action_Save_triggered()
 {
     QString fileName = QFileDialog::getSaveFileName(this, "Save Project", "", "Database files (*.db)");
+    if (!fileName.endsWith(".db"))
+    {
+        fileName += ".db";
+    }
+
+    Db db(fileName);
+    db.saveProject(&project);
 
 }
 

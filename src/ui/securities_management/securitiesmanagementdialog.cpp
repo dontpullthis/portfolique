@@ -50,15 +50,15 @@ void SecuritiesManagementDialog::on_btnRemoveItem_clicked()
 
     current->parent()->removeChild(current);
 }
-
 void SecuritiesManagementDialog::on_btnAddCategory_clicked()
 {
     SecurityTreeWidgetItem* current = (SecurityTreeWidgetItem*)this->ui->treeWidget->currentItem();
     if (!(current && current->model->isCategory()))
         return;
-
+\
     Category *currentCategory = (Category*)current->model;
     Category *newCategory = new Category(QString("(New category)"), currentCategory);
+    currentCategory->addChild(newCategory);
 
     SecurityTreeWidgetItem* newItem = new SecurityTreeWidgetItem(current, newCategory);
     this->ui->treeWidget->setCurrentItem(newItem);
@@ -73,11 +73,10 @@ void SecuritiesManagementDialog::on_btnAddSecurity_clicked()
 
     Category *currentCategory = (Category*)current->model;
     Security *newSecurity = new Security(QString("(New security)"), currentCategory);
+    currentCategory->addChild(newSecurity);
 
     SecurityTreeWidgetItem* newItem = new SecurityTreeWidgetItem(current, newSecurity);
-    newItem->setFlags(newItem->flags() | Qt::ItemIsEditable);
     this->ui->treeWidget->setCurrentItem(newItem);
-    this->ui->treeWidget->editItem(newItem);
 }
 
 

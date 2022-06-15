@@ -12,7 +12,7 @@ public:
     bool isCategory();
 
     void addChild(AbstractItem* child);
-private:
+public:
     QList<AbstractItem*> children;
 };
 

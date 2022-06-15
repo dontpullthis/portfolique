@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -9,6 +9,8 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    src/application.cpp \
+    src/db/db.cpp \
     src/project/securities/abstractitem.cpp \
     src/project/securities/category.cpp \
     src/project/securities/security.cpp \
@@ -19,6 +21,8 @@ SOURCES += \
     src/ui/securities_management/securitytreewidgetitem.cpp
 
 HEADERS += \
+    src/application.h \
+    src/db/db.h \
     src/project/securities/abstractitem.h \
     src/project/securities/category.h \
     src/project/securities/security.h \

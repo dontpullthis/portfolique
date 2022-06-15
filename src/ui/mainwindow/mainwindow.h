@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QFileDialog>
 
+#include "src/db/db.h"
 #include "src/project/project.h"
 #include "src/ui/securities_management/securitiesmanagementdialog.h"
 

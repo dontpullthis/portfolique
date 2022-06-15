@@ -13,8 +13,8 @@ public:
 
     virtual bool isCategory() { return false; };
 
+    int id;
     QString name;
-private:
 
     AbstractItem* parent;
 };
