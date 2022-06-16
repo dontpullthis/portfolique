@@ -9,6 +9,7 @@
 class AbstractItem
 {
 public:
+    AbstractItem();
     AbstractItem(QString name, AbstractItem* parent = nullptr);
 
     virtual bool isCategory() { return false; };

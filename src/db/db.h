@@ -8,6 +8,9 @@
 #include <QSqlError>
 #include <QSqlQuery>
 
+#include <QList>
+#include <QMap>
+#include <QMapIterator>
 #include <QVariant>
 
 #include "src/project/project.h"
@@ -20,6 +23,7 @@ public:
     Db(QString fileName);
 
     void saveProject(Project *project);
+    Project loadProject();
 private:
     QSqlDatabase db;
 };

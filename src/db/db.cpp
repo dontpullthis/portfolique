@@ -68,8 +68,7 @@ Db::Db(QString fileName)
     if(!db.open())
     {
         QMessageBox messageBox;
-        messageBox.critical(0,"Error", QString("Can't open a database \"" + fileName + "\". Error: " + db.lastError().text()));
-
+        messageBox.critical(0, "Error", QString("Can't open a database \"" + fileName + "\". Error: " + db.lastError().text()));
     }
 
     QSqlQuery query("CREATE TABLE IF NOT EXISTS securities(id INTEGER PRIMARY KEY, name TEXT NOT NULL, category_id INTEGER NOT NULL)");
@@ -82,3 +81,74 @@ void Db::saveProject(Project *project)
     saveProjectCategory(nullptr, &project->rootSecurityCategory);
 }
 
+Project Db::loadProject()
+{
+    Project project;
+    QSqlQuery query;
+    query.prepare("SELECT id, name, parent_id FROM security_categories;");
+    if(!query.exec())
+    {
+        QMessageBox messageBox;
+        messageBox.critical(0, "Error", QString("Cannot get secuirity categories from the project. Error: " + query.lastError().text()));
+        return project;
+    }
+    QMap<int, Category*> categoriesMap;
+    QMap<int, QList<int>> childrenMap;
+    Category *rootCategory = nullptr;
+    while (query.next())
+    {
+        Category *category = new Category();
+        category->id = query.value(0).toInt();
+        category->name = query.value(1).toString();
+        int parentId = query.value(2).toInt();
+
+        categoriesMap[category->id] = category;
+        if (0 == parentId)
+        {
+            rootCategory = category;
+        }
+        if (!childrenMap.contains(parentId))
+        {
+            childrenMap[parentId] = QList<int>();
+        }
+        childrenMap[parentId].append(category->id);
+
+    }
+
+    QMapIterator<int, QList<int>> it(childrenMap);
+    while (it.hasNext())
+    {
+        it.next();
+        int parentId = it.key();
+        if (0 == parentId)
+            continue;
+        Category *parent = categoriesMap[parentId];
+        for (int childId: it.value())
+        {
+            Category *child = categoriesMap[childId];
+            parent->addChild(child);
+        }
+    }
+
+    query.prepare("SELECT id, name, category_id FROM securities");
+    if(!query.exec())
+    {
+        QMessageBox messageBox;
+        messageBox.critical(0, "Error", QString("Cannot get secuirities from the project. Error: " + query.lastError().text()));
+        return project;
+    }
+    while (query.next())
+    {
+        Security *security = new Security();
+        security->id = query.value(0).toInt();
+        security->name = query.value(1).toString();
+        int categoryId = query.value(2).toInt();
+
+        Category *category = categoriesMap[categoryId];
+        category->addChild(security);
+    }
+
+    project.rootSecurityCategory = *rootCategory;
+
+    return project;
+}

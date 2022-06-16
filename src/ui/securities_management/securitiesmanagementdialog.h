@@ -39,6 +39,7 @@ private:
 
     Category *rootSecurityCategory;
 
+    SecurityTreeWidgetItem* buildSecurityTreeWidget(SecurityTreeWidgetItem *parent, AbstractItem *item = nullptr);
     SecurityTreeWidgetItem* buildSecurityTreeWidget(QTreeWidget *parent, AbstractItem *item = nullptr);
     void setFormProperties();
 };

@@ -25,6 +25,8 @@ private slots:
 
     void on_action_Save_triggered();
 
+    void on_action_Open_triggered();
+
 private:
     Project project;
 

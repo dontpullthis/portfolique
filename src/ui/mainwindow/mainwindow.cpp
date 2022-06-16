@@ -36,3 +36,12 @@ void MainWindow::on_action_Save_triggered()
 
 }
 
+
+void MainWindow::on_action_Open_triggered()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, "Open Project", "", "Database files (*.db)");
+    Db db(fileName);
+    this->project = db.loadProject();
+    QString fileName2 = "";
+}
+

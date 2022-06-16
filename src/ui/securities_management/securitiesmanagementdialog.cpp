@@ -16,10 +16,32 @@ SecuritiesManagementDialog::~SecuritiesManagementDialog()
     delete ui;
 }
 
+SecurityTreeWidgetItem* SecuritiesManagementDialog::buildSecurityTreeWidget(SecurityTreeWidgetItem *parent, AbstractItem *item)
+{
+    SecurityTreeWidgetItem *result = new SecurityTreeWidgetItem(parent, item);
+    if (item->isCategory())
+    {
+        Category *category = (Category*)item;
+        for (AbstractItem *child: category->children)
+        {
+            result->addChild(this->buildSecurityTreeWidget(result, child));
+        }
+    }
+
+    return result;
+}
 
 SecurityTreeWidgetItem* SecuritiesManagementDialog::buildSecurityTreeWidget(QTreeWidget *parent, AbstractItem *item)
 {
     SecurityTreeWidgetItem *result = new SecurityTreeWidgetItem(parent, item);
+    if (item->isCategory())
+    {
+        Category *category = (Category*)item;
+        for (AbstractItem *child: category->children)
+        {
+            result->addChild(this->buildSecurityTreeWidget(result, child));
+        }
+    }
 
     return result;
 }
