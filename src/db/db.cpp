@@ -1,5 +1,5 @@
 #include "db.h"
-
+#include <QDebug>
 void saveProjectCategory(AbstractItem *parent, AbstractItem *current)
 {
     // Process ittem
@@ -22,22 +22,27 @@ void saveProjectCategory(AbstractItem *parent, AbstractItem *current)
     }
     else
     {
+        Security *security = (Security*)current;
         if (-1 == current->id)
         {
-            query.prepare("INSERT INTO securities(name, category_id) VALUES(:name, :category_id)");
+            query.prepare("INSERT INTO securities(name, category_id, code, decimal_numbers) VALUES(:name, :category_id, :code, :decimal_numbers)");
             isInsertOperation = true;
 
         }
         else
         {
-            query.prepare("UPDATE securites SET name = :name, category_id = :category_id WHERE id = :id");
-            query.bindValue(":id", QVariant(current->id));
+            query.prepare("UPDATE securities SET name = :name, category_id = :category_id, code = :code, decimal_numbers = :decimal_numbers WHERE id = :id");
+            query.bindValue(":id", QVariant(security->id));
         }
         query.bindValue(":category_id", QVariant(parent->id));
+        query.bindValue(":code", QVariant(security->code));
+        query.bindValue(":decimal_numbers", QVariant(security->decimalNumbers));
 
     }
     query.bindValue(":name", QVariant(current->name));
-    query.exec();
+    bool test = query.exec();
+    qDebug() << "STATUS: " << test;
+
 
     // Process children
     if (isInsertOperation)
@@ -71,7 +76,7 @@ Db::Db(QString fileName)
         messageBox.critical(0, "Error", QString("Can't open a database \"" + fileName + "\". Error: " + db.lastError().text()));
     }
 
-    QSqlQuery query("CREATE TABLE IF NOT EXISTS securities(id INTEGER PRIMARY KEY, name TEXT NOT NULL, category_id INTEGER NOT NULL)");
+    QSqlQuery query("CREATE TABLE IF NOT EXISTS securities(id INTEGER PRIMARY KEY, name TEXT NOT NULL, category_id INTEGER NOT NULL, code TEXT NOT NULL, decimal_numbers INTEGER NOT NULL)");
     query = QSqlQuery("CREATE TABLE IF NOT EXISTS security_categories(id INTEGER PRIMARY KEY, name TEXT NOT NULL, parent_id INTEGER)");
 }
 
@@ -130,7 +135,7 @@ Project Db::loadProject()
         }
     }
 
-    query.prepare("SELECT id, name, category_id FROM securities");
+    query.prepare("SELECT id, name, category_id, code, decimal_numbers FROM securities");
     if(!query.exec())
     {
         QMessageBox messageBox;
@@ -143,6 +148,8 @@ Project Db::loadProject()
         security->id = query.value(0).toInt();
         security->name = query.value(1).toString();
         int categoryId = query.value(2).toInt();
+        security->code = query.value(3).toString();
+        security->decimalNumbers = query.value(4).toInt();
 
         Category *category = categoriesMap[categoryId];
         category->addChild(security);

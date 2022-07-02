@@ -26,6 +26,8 @@ void MainWindow::on_action_Management_triggered()
 void MainWindow::on_action_Save_triggered()
 {
     QString fileName = QFileDialog::getSaveFileName(this, "Save Project", "", "Database files (*.db)");
+    if ("" == fileName)
+        return;
     if (!fileName.endsWith(".db"))
     {
         fileName += ".db";
@@ -40,8 +42,9 @@ void MainWindow::on_action_Save_triggered()
 void MainWindow::on_action_Open_triggered()
 {
     QString fileName = QFileDialog::getOpenFileName(this, "Open Project", "", "Database files (*.db)");
+    if ("" == fileName)
+        return;
     Db db(fileName);
     this->project = db.loadProject();
-    QString fileName2 = "";
 }
 

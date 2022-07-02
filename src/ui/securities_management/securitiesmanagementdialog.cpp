@@ -110,12 +110,24 @@ void SecuritiesManagementDialog::on_btnResetItem_clicked()
 
 void SecuritiesManagementDialog::setFormProperties()
 {
-    QTreeWidgetItem* current = this->ui->treeWidget->currentItem();
-    SecurityTreeWidgetItem* currentItem = (SecurityTreeWidgetItem*)current;
+    SecurityTreeWidgetItem* current = (SecurityTreeWidgetItem*)this->ui->treeWidget->currentItem();
+    if (nullptr == current) {
+        this->ui->editName->setText("");
+        this->ui->editCode->setText("");
+        this->ui->editDecimalNumbers->setText("");
+        return;
+    }
 
-    if (!currentItem) return;
+    // Common fields for securities and categories
+    this->ui->editName->setText(current->model->name);
 
-    this->ui->editName->setText(currentItem ? currentItem->model->name : "");
+    // Fields specific for securities
+    if (current->model->isCategory()) {
+        return;
+    }
+    Security *model = (Security*)current->model;
+    this->ui->editCode->setText(model->code);
+    this->ui->editDecimalNumbers->setText(QString::number(model->decimalNumbers));
 }
 
 void SecuritiesManagementDialog::on_btnSaveItem_clicked()
@@ -123,10 +135,14 @@ void SecuritiesManagementDialog::on_btnSaveItem_clicked()
     QTreeWidgetItem* current = this->ui->treeWidget->currentItem();
     SecurityTreeWidgetItem* currentItem = (SecurityTreeWidgetItem*)current;
 
-    if (!currentItem) return;
+    if (!currentItem)
+        return;
+    Security *model = (Security*)currentItem->model;
 
-    AbstractItem *model = currentItem->model;
     model->name = this->ui->editName->text();
+    model->code = this->ui->editCode->text();
+    model->decimalNumbers = this->ui->editDecimalNumbers->text().toInt();
+
     currentItem->setData(0, 0, model->name);
 }
 
